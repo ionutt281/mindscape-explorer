@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindscape Explorer | Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/css-index.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/js-index.js"></script>
+    <style>
+    /* customized page 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            min-height: 100vh;
+        } */
+    </style>
+</head>
+<body>
+  <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Mindful Explorations</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mind.html">Mind & Behavior</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="media.html">Media</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="buddhism.html">Buddhism</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-lg-12 text-center">
+                    <h1 class="display-3 text-white">Explore Consciousness</h1>
+                    <p class="lead text-white">Journey through the human mind, creative expression, and spiritual wisdom</p>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </header>
+
+    
+  <!-- Main Content -->
+    <!-- Home Page -->
+    <section id="home" class="page-section active">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-8">
+                    <h1 class="section-title">Mindscape Explorer</h1>
+                    <p class="lead">Journey through the landscapes of mind, media, and mindfulness</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="page-card">
+                        <h3>Psychology</h3>
+                        <p>Explore essays on the human mind and behavior. Discover insights into cognitive processes, emotional intelligence, and social dynamics that shape our experiences.</p>
+                        <button class="btn" data-page="psychology">Explore Psychology</button>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="page-card">
+                        <h3>Media & Art</h3>
+                        <p>Immerse yourself in creative expressions and cultural analysis. Discover how media shapes our perceptions and artistic content influences society.</p>
+                        <button class="btn" data-page="media">Explore Media</button>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="page-card">
+                        <h3>Buddhism</h3>
+                        <p>Discover the wisdom of Buddhist teachings for modern living. Explore mindfulness practices, compassion meditation, and the path to inner peace.</p>
+                        <button class="btn" data-page="buddhism">Explore Buddhism</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="card-title">About This Project</h3>
+                                <p>Mindscape Explorer is a comprehensive exploration of human consciousness through three distinct lenses:</p>
+                                <ul>
+                                    <li><strong>Psychology</strong> - Understanding the human mind and behavior</li>
+                                    <li><strong>Media & Art</strong> - Exploring creative expressions and their impact</li>
+                                    <li><strong>Buddhism</strong> - Discovering mindfulness and spiritual wisdom</li>
+                                </ul>
+                                <p>Each section offers unique insights and perspectives to help you navigate the complexities of modern life.</p>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center">
+                                <img src="https://images.unsplash.com/photo-1495592822108-9e6261896da8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="img-fluid rounded" alt="Mindscape">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Audio Player -->
+    <div class="audio-player-container" id="audio-player">
+        <div class="player-header">
+            <h5 class="player-title">Mindful Sounds</h5>
+            <div class="player-controls">
+                <button class="player-btn" id="prev-btn"><i class="fas fa-step-backward"></i></button>
+                <button class="player-btn" id="play-btn"><i class="fas fa-play"></i></button>
+                <button class="player-btn" id="next-btn"><i class="fas fa-step-forward"></i></button>
+            </div>
+        </div>
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="time-display">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+        <div class="playlist" id="playlist">
+            <div class="playlist-item active" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Meditation Tone</div>
+            <div class="playlist-item" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Nature Sounds</div>
+            <div class="playlist-item" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Zen Bell</div>
+        </div>
+        <div class="audio-upload">
+            <input type="file" id="file-upload" accept="audio/*" style="display: none;">
+            <button class="upload-btn" id="upload-btn"><i class="fas fa-upload"></i> Upload</button>
+            <input type="text" class="url-input mt-2" id="audio-url" placeholder="Or enter audio URL">
+            <button class="upload-btn mt-2 w-100" id="add-url-btn"><i class="fas fa-link"></i> Add URL</button>
+        </div>
+    </div>
+
+    <!-- Player Toggle Button -->
+    <button class="player-toggle-btn" id="player-toggle">
+        <i class="fas fa-headphones"></i>
+    </button>
+
+    <!-- Mobile Scroll Button -->
+    <button class="mobile-scroll-btn" id="mobile-scroll-btn">
+        <i class="fas fa-arrow-down"></i>
+    </button>
+    
+  <!-- Footer  -->
+    <footer class="bg-dark text-white py-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 padding_left"><p class=" font_size">Check my other platforms: </p>
+                </div>
+                <div class="col-6 ">
+                    <a href="#" class="px-4 text-white"><i class="fab     fa-youtube"></i></a>
+                     <a href="#" class="text-white"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+            <div class="row">
+                    <div class="col-8 padding_left">
+                    <input type="email" class="form-control" placeholder="Share your email for notifications">
+                    </div>
+                    <div class="col-4 align_center2">
+                    <button type="button" class="btn btn-primary">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>
