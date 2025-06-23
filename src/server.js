@@ -15,6 +15,15 @@ app.get('/media', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'media.html'));
 });
 
+app.get('/buddhism', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'buddhism.html'));
+});
+
+app.get('/mind', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'mind.html'));
+});
+
+
 // Add other routes as needed...
 
 app.listen(port, () => {
