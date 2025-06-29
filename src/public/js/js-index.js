@@ -185,6 +185,9 @@ $('#player-toggle').click(function() {
 
 //Text reader
 document.addEventListener('DOMContentLoaded', function() {
+            if ('connection' in navigator) {
+  console.log('Connection speed:', navigator.connection.effectiveType);
+}
             const sentences = document.querySelectorAll('.sentence');
             const playBtn = document.getElementById('play-btn');
             const pauseBtn = document.getElementById('pause-btn');
@@ -282,3 +285,36 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 3000);
         });
 
+
+// Add web vitals tracking
+const reportWebVitals = () => {
+  if (window.ga) {
+    ga('send', 'event', {
+      eventCategory: 'Web Vitals',
+      eventAction: 'track',
+      eventValue: Math.round(performance.now())
+    });
+  }
+};
+
+// Add lazy loading
+document.addEventListener('DOMContentLoaded', function() {
+  const lazyImages = [].slice.call(document.querySelectorAll('img.lazy'));
+  
+  if ('IntersectionObserver' in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target;
+          lazyImage.src = lazyImage.dataset.src;
+          lazyImage.classList.remove('lazy');
+          lazyImageObserver.unobserve(lazyImage);
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage);
+    });
+  }
+});
