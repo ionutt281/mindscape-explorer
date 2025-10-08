@@ -47,9 +47,25 @@
                         <div class="col-md-8 mx-auto">
                             <div class="card h-100">
                                 <div class="ratio ratio-16x9">
-                                   <iframe width="560" height="315" src="https://www.youtube.com/embed/g-3FIkyGgSg?si=tdRcyZd4ZMHHWiF2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                                        
-                                   </iframe>
+                                  <iframe 
+  src="https://youtu.be/g-3FIkyGgSg"
+  width="560" 
+  height="315"
+  frameborder="0"
+  allowfullscreen>
+  
+  <!-- Fallback content -->
+  <object 
+    data="https://youtu.be/g-3FIkyGgSg"
+    width="560" 
+    height="315">
+    <embed 
+      src="https://youtu.be/g-3FIkyGgSg"
+      width="560" 
+      height="315">
+  </object>
+</iframe>
+                                     
                                 </div>
                                 <div class="card-body">
                                     <h2>Two types of fire</h2>
