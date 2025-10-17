@@ -17,6 +17,364 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/js-index.js"></script>
     
+    <style>
+        /* Custom styles for the modified text reader */
+        .reader-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+        
+        .reader-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        
+        .book-content {
+            flex: 1;
+            padding: 30px;
+            font-size: 18px;
+            line-height: 1.6;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            height: 100%;
+            overflow-y: auto;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+        }
+        
+        .bookmarks-section {
+            border-top: 1px solid #eee;
+            background: white;
+            max-height: calc(1.2em + 40px);
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .bookmarks-section.expanded {
+            max-height: 40%;
+        }
+        
+        .bookmarks-header {
+            padding: 10px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            min-height: calc(1.2em + 20px);
+        }
+        
+        .bookmarks-header:hover {
+            background: var(--secondary-color);
+        }
+        
+        .bookmarks-content {
+            padding: 0 30px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            position: relative;
+        }
+        
+        .bookmarks-content.expanded {
+            max-height: calc(100% - calc(1.2em + 40px));
+            padding: 20px 30px;
+        }
+        
+        .bookmarks-toggle {
+            transition: transform 0.3s ease;
+        }
+        
+        .bookmarks-toggle.rotated {
+            transform: rotate(180deg);
+        }
+        
+        /* Ensure the container section takes full width */
+        .container {
+            max-width: 100% !important;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        
+        /* Center the reader within the viewport */
+        .py-5 {
+            display: flex;
+            justify-content: center;
+            padding-left: 2.5vw;
+            padding-right: 2.5vw;
+        }
+        
+        /* YouTube iframe styling - Larger size */
+        .youtube-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin-bottom: 20px;
+        }
+        
+        .youtube-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            border: none;
+        }
+        
+        /* Upload button styling inside bookmark content */
+        .upload-toggle-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        
+        .upload-toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .upload-toggle-btn::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            z-index: -1;
+            opacity: 0.4;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.4;
+            }
+            70% {
+                transform: scale(1.1);
+                opacity: 0.2;
+            }
+            100% {
+                transform: scale(0.95);
+                opacity: 0.4;
+            }
+        }
+        
+        /* Upload panel styling */
+        .upload-panel {
+            position: absolute;
+            top: 50px;
+            right: 15px;
+            width: 280px;
+            background: rgba(13, 44, 84, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+            border: 1px solid rgba(187, 222, 251, 0.3);
+        }
+        
+        .upload-panel.show {
+            display: block;
+        }
+        
+        .upload-panel h5 {
+            color: var(--light-blue);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .upload-panel-btn {
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .upload-panel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .upload-info {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--light-blue);
+            text-align: center;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        /* Parsed document styling */
+        .parsed-content h1 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .parsed-content h2 {
+            color: var(--secondary-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .parsed-content h3 {
+            color: var(--dark-blue);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .parsed-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .parsed-content .sentence {
+            transition: background-color 0.3s;
+            padding: 2px 4px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .parsed-content .sentence:hover {
+            background-color: rgba(78, 84, 200, 0.1);
+        }
+        
+        /* Adjust bookmark content to accommodate upload button */
+        .bookmarks-content-inner {
+            padding-right: 50px;
+        }
+
+        /* Video card styling */
+        .video-card {
+            margin-bottom: 30px;
+        }
+
+        /* Text selection popup */
+        .selection-popup {
+            position: absolute;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 10000;
+            display: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .selection-popup:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .selection-popup::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid var(--primary-color);
+        }
+
+        .selection-popup:hover::after {
+            border-bottom-color: var(--secondary-color);
+        }
+
+        /* Highlight selected text */
+        .text-highlight {
+            background-color: rgba(255, 217, 102, 0.5);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        /* Quote management */
+        .quote-count {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-left: 10px;
+        }
+
+        .editable-title {
+            border: 1px dashed transparent;
+            padding: 2px 4px;
+            border-radius: 3px;
+            cursor: text;
+            transition: all 0.3s ease;
+        }
+
+        .editable-title:hover {
+            border-color: #ccc;
+            background: #f8f9fa;
+        }
+
+        .editable-title:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+        }
+
+        .delete-quote {
+            color: #dc3545;
+            cursor: pointer;
+            margin-left: 10px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .delete-quote:hover {
+            opacity: 1;
+        }
+
+        .quote-source {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+    </style>
+    
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
@@ -33,8 +391,7 @@
     </script>
 </head>
 <body>
-    
-      <!-- Navigation -->
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.html">Mindful Explorations</a>
@@ -44,26 +401,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
+                        <a class="nav-link" href="index.html">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="buddhism.html">Buddhism</a>
                     </li>
-                    <!-- Unfinished mind section
                     <li class="nav-item">
                         <a class="nav-link" href="mind.html">Psychology</a>
                     </li>
-                    -->
                     <li class="nav-item">
-                        <a class="nav-link" href="media_with_gm2.html">Media</a>
+                        <a class="nav-link active" href="media_with_gm2.html">Media</a>
                     </li>
-                    
                 </ul>
             </div>
         </div>
     </nav>
-    
-        <!-- Media Section (existing content) -->
+
+        <!-- Media Section -->
         <section id="media" class="page-section">
             <div class="container py-5">
                 <article>
@@ -74,41 +428,47 @@
                     </header>
                     
                     <section class="row">
-                        <div class="col-md-8 mx-auto">
-                            <div class="card h-100">
-                                <div class="ratio ratio-16x9">
-                                  <iframe 
-  src="https://youtu.be/g-3FIkyGgSg"
-  width="560" 
-  height="315"
-  frameborder="0"
-  allowfullscreen>
-  
-  <!-- Fallback content -->
-  <object 
-    data="https://youtu.be/g-3FIkyGgSg"
-    width="560" 
-    height="315">
-    <embed 
-      src="https://youtu.be/g-3FIkyGgSg"
-      width="560" 
-      height="315">
-  </object>
-</iframe>
-                                     
+                        <div class="col-12">
+                            <div class="card video-card">
+                                <div class="youtube-container">
+                                    <iframe 
+                                        src="https://www.youtube.com/embed/g-3FIkyGgSg"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen>
+                                    </iframe>
                                 </div>
                                 <div class="card-body">
                                     <h2>Two types of fire</h2>
-                                    <p>The two types of fire: fire of lust and fire of mindfulness.</p>
-<p>“Here, friend Sariputta, a bhikkhu has learned much, remembers what he has learned, and consolidates what he has learned. Such teachings as are good in the beginning, good in the middle, and good in the end, with the right meaning and phrasing, and which affirm a holy life that is utterly perfect and pure — such teachings as these he has learned much of, remembered, mastered verbally, investigated with the mind, and penetrated well by view. And he teaches the Dhamma to the four assemblies with well-rounded and coherent statements and phrases for the eradication of the underlying tendencies." That kind of bhikkhu could illuminate this Gosinga Sala-tree Wood.” (32 Mahàgosinga Sutta: The Greater Discourse in Gosinga; Majjihima Nikaya - Middle Length Discourses Of The Buddha: https://archive.org/details/majjihimanikayamiddlelengthdiscoursesofthebuddhabhikkhunanamolibhikkubodhi_900_c/page/n315/mode/1up)</p>
-<p>“Delight at heart, every disciple should not hesitate, wherever possible, to inculcate the Dharma that is real and subtle and to show the path of nirvana, believing in the testimony of what the knower of the path has been practicing.” (The Canonical Book of the Buddha’s Lengthy Discourses, Vol. I: https://www.bdkamerica.org/product/the-canonical-book-of-the-buddhas-lengthy-discourses-vol-i/; page 77)</p>
-<p>“And what, Punna, is dark action with dark result? Here someone generates an afflictive bodily formation, an afflictive verbal formation, an afflictive mental formation. Having generated an afflictive bodily formation, an afflictive verbal formation, an afflictive mental formation, he reappears in an afflictive world. When he has reappeared in an afflictive world, afflictive contacts touch him. Being touched by afflictive contacts, he feels afflictive feelings, extremely painful, as in the case of the beings in  hell. Thus a being’s reappearance is due to a being: one reappears through the actions one has performed. When one has reappeared, contacts touch one. Thus I say beings are the heirs of their actions. This is called dark action with dark result.” (57 Kukkuravatika Sutta: The Dog-duty Ascetic; Majjihima Nikaya)</p>
-<p>“Again, Udayin, I have proclaimed to my disciples the way whereby with the divine eye, which is purified and surpasses the human, they see beings passing away and reappearing, inferior and superior, fair and ugly, fortunate and unfortunate. They understand how beings pass on according to their actions thus: ‘These worthy beings who were ill-conducted in body, speech, and mind, revilers of noble ones, wrong in their views, giving effect to wrong view in their actions, on the dissolution of the body, after death, have reappeared in a state of deprivation, in a bad destination, in perdition, even in hell;” (77 Mahasakuludayi Sutta: The Greater Discourse to Sakuludayin; Majjihima Nikaya)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </section>
+
+        <!-- Text Reader Section -->
+        <section class="container py-5">
+            <div class="reader-container" style="width: 95vw; margin: 0 auto;">
+                <div class="book-cover">
+                    <span id="reader-title">Two Types of Fire</span>
+                    <span class="float-end" id="document-info"></span>
+                </div>
+                <div class="reader-body">
+                    <div class="book-content" id="text-content">
+                        <div class="parsed-content">
+                           <p><span class="sentence">The two types of fire: fire of lust and fire of mindfulness.</p>
+<p><span class="sentence"></span>“Here, friend Sariputta, a bhikkhu has learned much, remembers what he has learned, and consolidates what he has learned. Such teachings as are good in the beginning, good in the middle, and good in the end, with the right meaning and phrasing, and which affirm a holy life that is utterly perfect and pure — such teachings as these he has learned much of, remembered, mastered verbally, investigated with the mind, and penetrated well by view. And he teaches the Dhamma to the four assemblies with well-rounded and coherent statements and phrases for the eradication of the underlying tendencies." That kind of bhikkhu could illuminate this Gosinga Sala-tree Wood.” (32 Mahàgosinga Sutta: The Greater Discourse in Gosinga; Majjihima Nikaya - Middle Length Discourses Of The Buddha: https://archive.org/details/majjihimanikayamiddlelengthdiscoursesofthebuddhabhikkhunanamolibhikkubodhi_900_c/page/n315/mode/1up)</p>
+<p><span class="sentence"></span>“Delight at heart, every disciple should not hesitate, wherever possible, to inculcate the Dharma that is real and subtle and to show the path of nirvana, believing in the testimony of what the knower of the path has been practicing.” (The Canonical Book of the Buddha’s Lengthy Discourses, Vol. I: https://www.bdkamerica.org/product/the-canonical-book-of-the-buddhas-lengthy-discourses-vol-i/; page 77)</p>
+<p><span class="sentence"></span>“And what, Punna, is dark action with dark result? Here someone generates an afflictive bodily formation, an afflictive verbal formation, an afflictive mental formation. Having generated an afflictive bodily formation, an afflictive verbal formation, an afflictive mental formation, he reappears in an afflictive world. When he has reappeared in an afflictive world, afflictive contacts touch him. Being touched by afflictive contacts, he feels afflictive feelings, extremely painful, as in the case of the beings in  hell. Thus a being’s reappearance is due to a being: one reappears through the actions one has performed. When one has reappeared, contacts touch one. Thus I say beings are the heirs of their actions. This is called dark action with dark result.” (57 Kukkuravatika Sutta: The Dog-duty Ascetic; Majjihima Nikaya)
+</p>
+<p><span class="sentence"></span>“Again, Udayin, I have proclaimed to my disciples the way whereby with the divine eye, which is purified and surpasses the human, they see beings passing away and reappearing, inferior and superior, fair and ugly, fortunate and unfortunate. They understand how beings pass on according to their actions thus: ‘These worthy beings who were ill-conducted in body, speech, and mind, revilers of noble ones, wrong in their views, giving effect to wrong view in their actions, on the dissolution of the body, after death, have reappeared in a state of deprivation, in a bad destination, in perdition, even in hell;” (77 Mahasakuludayi Sutta: The Greater Discourse to Sakuludayin; Majjihima Nikaya)</p>
                                      <p>My understanding: wrong view is wrong understanding of purpose of life (not believing in karma, or wrong application of cleaning bad karma; right application is the eightfold path - by developing wholesome mind states to reach understanding and by this remove the defilments of sensual pleasures, of being and of ignorance, reaching final Nibbana), because of negligence in investigating thoroughly: “Investigate thoroughly, householder. It is good for such well-known people like you to investigate thoroughly.” (56 Upali Sutta: To Upali; Majjihima Nikaya). </p>
-<p>How to investigate  thoroughly?  With the fire of mindfulness: 
+<p><span class="sentence"></span>How to investigate  thoroughly?  With the fire of mindfulness: 
 “Here, Udayin, some person practices the way to the abandoning of attachment, to the relinquishing of attachment. When he is practicing the way, memories and intentions associated with attachment beset him now and then through lapses of mindfulness. His mindfulness may be slow in arising, but he quickly abandons them, removes them, does away with them, and annihilates them. Just as if a man were to let two or three drops of water fall onto an iron plate heated for a whole day, the falling of the water drops might be slow but they would quickly vaporise and vanish. So too, here some person practices the way...His mindfulness may be slow in arising, but he quickly abandons them, removes them, does away with them, and annihilates them. Such a person too I call fettered, not unfettered. Why is that? Because I have known the particular diversity of faculties in this person.”(66 Latukikopama Sutta: The Simile of the Quail; Majjihima Nikaya). I understand this statement as describing a stream-enterer. Memories and intentions associated with attachment  are unwholesome mind tendencies.  I see more clearly, as bad mind tendencies diminish.
 </P>
-<p>The Canonical Book of the Buddha’s Lengthy Discourses, Volume I, Sutra 8: Sandhāna:
+<p><span class="sentence"></span>The Canonical Book of the Buddha’s Lengthy Discourses, Volume I, Sutra 8: Sandhāna:
 
 "The brāhmaṇa replied, “Very well, Gautama, explain why our forms of
 practice are morally impure and deﬁled. I wish to know about it.”
@@ -293,18 +653,28 @@ tively listening to my teaching, the Evil One Pāpīyān has now disrupted
 their minds..."</p>
 
                                         
-<p>My understanding: While trying to spark the fire of mindfulness, because of my obsessions, I have a quite wrong view about myself, so I am more prone to ill-will/ resentment, which is the source of agitation, sanran, ignorance, violence, suffering.</p>
-<p>"He then told the boy, “When you wish to make a ﬁre you should do so in this manner. You cannot get ﬁre by splitting wood or pounding it.”
-(The Canonical Book of the Buddha’s Lengthy Discourses, Volume I, Sutra 7: Pāyāsi’s Dialogue)</p>
+<p><span class="sentence">My understanding: While trying to spark the fire of mindfulness, because of my obsessions, I have a quite wrong view about myself, so I am more prone to ill-will/ resentment, which is the source of agitation, sanran, ignorance, violence, suffering.
+</span></p>
+
+<p><span class="sentence">"He then told the boy, “When you wish to make a ﬁre you should do so in this manner. You cannot get ﬁre by splitting wood or pounding it.”
+(The Canonical Book of the Buddha’s Lengthy Discourses, Volume I, Sutra 7: Pāyāsi’s Dialogue
+</span></p>
 
 
-<p>My daily practice: - 1 hour in morning as instructed in Fukanzazengi: https://www.sfzc.org/files/daily_sutras_Fukanzazengi; in my undestanding it corresponds to second jhana and above.</p>
-                  <p> - half an hour in total in evening to break sanran/agitation tendency of mind, by visualisation a couple of times as instructed in Wild Ivy Chapter 4: Zen Sickness, The Soft-Butter Method: https://inscribedonthebelievingmind.blog/wp-content/uploads/2018/10/hakuin_wildivy.pdf, then I concentrate on breaths on lower tanden/hara. In my understanding this corresponds to first jhana since it has a particular object to focus upon. </p>
-                   <p> - in the rest of the time I practice mindfulness in all actions I do, by lowering expectancies and plans while concentrating on one thing at a time; it's hard since fears and obsessive thoughts keep popping up in my head, but with practice those speculative, temporary conclusions-thoughts and the other distractions can be cut off more easly.
+<p><span class="sentence">My daily practice: - 1 hour in morning as instructed in Fukanzazengi: https://www.sfzc.org/files/daily_sutras_Fukanzazengi; in my undestanding it corresponds to second jhana and above.
+</span></p>
+
+<p><span class="sentence"> - half an hour in total in evening to break sanran/agitation tendency of mind, by visualisation a couple of times as instructed in Wild Ivy Chapter 4: Zen Sickness, The Soft-Butter Method: https://inscribedonthebelievingmind.blog/wp-content/uploads/2018/10/hakuin_wildivy.pdf, then I concentrate on breaths on lower tanden/hara. In my understanding this corresponds to first jhana since it has a particular object to focus upon.
+</span></p>
+
+<p><span class="sentence"> - in the rest of the time I practice mindfulness in all actions I do, by lowering expectancies and plans while concentrating on one thing at a time; it's hard since fears and obsessive thoughts keep popping up in my head, but with practice those speculative, temporary conclusions-thoughts and the other distractions can be cut off more easly.
                         Now devils will sense right away my somehow good and trimmed awareness and will try to obstruct from fireing further the mindfulness; you say is bogus, but go alone at night in forest and meditate and be aware of your quality of concentration
-                        to see when near noises from animals and nature trigger right when I managed to unify my mind to some degree from worries and passions; keep pushing the awareness in aversive situations by not acting because of revenge reasons. Better to seek and follow an accomplished and enlightened buddhist teacher in a temple if you have possibility. They will know the right application against ego only and will teach you how level of compassion rises as ego (will towards impermanence) is diminished. While letting go of ego by following right admonitions and such, beware always to keep your dignity (do not be persuaded by bad advices, mischevious jokes and mockery, or threats which leads to unwholesome mind states based on fears and passions, which would make me prone to bad karma habits)).</p>
-                                     
-                   <p>“ 8. Again, bhikkhus, a bhikkhu is one who acts in full awareness
+                        to see when near noises from animals and nature trigger right when I managed to unify my mind to some degree from worries and passions; keep pushing the awareness in aversive situations by not acting because of revenge reasons. Better to seek 
+                        and follow an accomplished and enlightened buddhist teacher in a temple if you have possibility. They will know the right application against ego only and will teach you how level of compassion rises as ego (will towards impermanence) is diminished. While letting go of ego by following right admonitions and such, beware always to keep your dignity (
+                        do not be persuaded by bad advices, mischevious jokes and mockery, or threats which leads to unwholesome mind states based on fears and passions, which would make me prone to bad karma habits.
+</span></p>
+
+ <p><span class="sentence">“8. Again, bhikkhus, a bhikkhu is one who acts in full awareness
 when going forward and returning; who acts in full awareness when looking ahead and looking away; who acts in full
 awareness when flexing and extending his limbs; who acts in
 full awareness when wearing his robes and carrying his outer
@@ -313,9 +683,12 @@ when defecating and urinating; who acts in full awareness when
 walking, standing, sitting, falling asleep, waking up, talking,
 and keeping silent."
 (10 Satipatthana Sutta: The Foundations of Mindfulness; Majjihima Nikaya)
-<br></p>
- <p>- stream-entry fruit: The three fetters destroyed by the stream-enterer are personality view, doubt in Buddha and adherence to external rules and observances believing that solely bodily actions with no benevolent intent and only faith can purify oneself (superstitions). These feathers I let go by daily practice. </p>
- <p>"18. “Possessing this aggregate of noble virtue, and this noble
+<br></span></p>
+
+ <p><span class="sentence">- stream-entry fruit: The three fetters destroyed by the stream-enterer are personality view, doubt in Buddha and adherence to external rules and observances believing that solely bodily actions with no benevolent intent and only faith can purify oneself (superstitions). These feathers I let go by daily practice.
+ </span></p>
+
+ <p><span class="sentence">"18. “Possessing this aggregate of noble virtue, and this noble
 restraint of the faculties, and possessing this noble mindfulness
 and full awareness, he resorts to a secluded resting place: the
 forest, the root of a tree, a mountain, a ravine, a hillside cave, a
@@ -342,12 +715,14 @@ of seclusion.
 22. Bhikkhus, I do not say that final knowledge is achieved
 all at once. On the contrary, final knowledge is achieved by
 gradual training, by gradual practice, by gradual progress."
-(51 Kandaraka Sutta: To Kandaraka)</p>
+(51 Kandaraka Sutta: To Kandaraka)
+</span></p>
 
-<p>"What is a singular item that is difﬁcult to realize? It is the state of continuous concentration without lapse."
-(The Canonical Book of the Buddha’s Lengthy Discourses, Volume I; Sutra 10: Ten Progressively Classiﬁed Doctrines)</p>
+<p><span class="sentence">"What is a singular item that is difﬁcult to realize? It is the state of continuous concentration without lapse."
+(The Canonical Book of the Buddha’s Lengthy Discourses, Volume I; Sutra 10: Ten Progressively Classiﬁed Doctrines)
+</span></p>
 
-<p> - final arahant-fruit:
+<p><span class="sentence"> - final arahant-fruit:
  "12. I do not say of those bhikkhus who are arahants with
 taints destroyed, who have lived the holy life, done what had to
 be done, laid down the burden, reached the true goal, destroyed
@@ -355,82 +730,452 @@ the fetters of being, and are completely liberated through final
 knowledge, that they still have work to do with diligence. Why
 is that? They have done their work with diligence; they are no
 more capable of being negligent."
-(70 Kīṭāgiri Sutta: At Kīṭāgiri; Majjihima Nikaya) </p>
-                                    
-                                </div>
+(70 Kīṭāgiri Sutta: At Kīṭāgiri; Majjihima Nikaya) 
+</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Text Selection Popup -->
+                <div class="selection-popup" id="selection-popup">
+                    <i class="fas fa-bookmark me-2"></i>Save to Quotes & Notes
+                </div>
+                
+                <!-- Expandable Quotes & Notes Section -->
+                <div class="bookmarks-section">
+                    <div class="bookmarks-header" id="bookmarks-toggle">
+                        <h4 class="mb-0"><i class="fas fa-quote-left me-2"></i>Quotes & Notes 
+                            <span class="quote-count" id="quote-count">(0/50)</span>
+                        </h4>
+                        <i class="fas fa-chevron-down bookmarks-toggle"></i>
+                    </div>
+                    <div class="bookmarks-content" id="bookmarks-content">
+                        <!-- Upload Toggle Button inside bookmark content -->
+                        <button class="upload-toggle-btn" id="upload-toggle">
+                            <i class="fas fa-file-upload"></i>
+                        </button>
+                        
+                        <!-- Upload Panel -->
+                        <div class="upload-panel" id="upload-panel">
+                            <h5><i class="fas fa-file-upload me-2"></i>Upload Document</h5>
+                            <input type="file" id="document-upload" class="file-input" accept=".pdf,.doc,.docx,.txt">
+                            <button class="upload-panel-btn" onclick="document.getElementById('document-upload').click()">
+                                <i class="fas fa-upload me-2"></i>Choose Document
+                            </button>
+                            <div class="upload-info">
+                                <small>Supported formats: PDF, Word documents, Text files</small>
                             </div>
                         </div>
-                    </section>
-                </article>
+                        
+                        <div class="bookmarks-content-inner">
+                            <div id="quotes-container" style="max-height: 200px; overflow-y: auto;">
+                                <!-- Quotes will be dynamically added here -->
+                            </div>
+                            
+                            <div class="note-editor mt-4">
+                                <h5 class="section-title"><i class="fas fa-edit me-2"></i>Add New Quote</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Quote Title</label>
+                                    <input type="text" class="form-control" id="new-quote-title" placeholder="Enter quote title">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Quote Text</label>
+                                    <textarea class="form-control" id="new-quote-text" rows="2" placeholder="Enter quote text"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Your Note</label>
+                                    <textarea class="form-control" id="new-quote-note" rows="2" placeholder="Add your personal note..."></textarea>
+                                </div>
+                                <button class="btn btn-accent w-100" id="save-quote-btn"><i class="fas fa-bookmark me-2"></i>Save Quote</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-      
-   <!-- Audio Player
-    <div class="audio-player-container" id="audio-player">
-        <div class="player-header">
-            <h5 class="player-title">Mindful Sounds</h5>
-            <div class="player-controls">
-                <button class="player-btn" id="prev-btn" aria-label="Previous track"><i class="fas fa-step-backward"></i></button>
-                <button class="player-btn" id="play-btn" aria-label="Play/pause"><i class="fas fa-play"></i></button>
-                <button class="player-btn" id="next-btn" aria-label="Next track"><i class="fas fa-step-forward"></i></button>
-            </div>
-        </div>
-        <div class="progress-container" id="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div class="time-display">
-            <span id="current-time">0:00</span>
-            <span id="duration">0:00</span>
-        </div>
-        <div class="playlist" id="playlist">
-            <div class="playlist-item active" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Meditation Tone</div>
-            <div class="playlist-item" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Nature Sounds</div>
-            <div class="playlist-item" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Zen Bell</div>
-        </div>
-        <div class="audio-upload">
-            <input type="file" id="file-upload" accept="audio/*" style="display: none;">
-            <button class="upload-btn" id="upload-btn"><i class="fas fa-upload"></i> Upload</button>
-            <input type="text" class="url-input mt-2" id="audio-url" placeholder="Or enter audio URL">
-            <button class="upload-btn mt-2 w-100" id="add-url-btn"><i class="fas fa-link"></i> Add URL</button>
-        </div>
-    </div> 
-    -->
+    <script>
+        // User-specific quotes storage
+        class QuoteManager {
+            constructor() {
+                this.userId = this.getUserId();
+                this.maxQuotes = 50;
+                this.loadQuotes();
+            }
 
-    <!-- Player Toggle Button 
-    <button class="player-toggle-btn" id="player-toggle" aria-label="Toggle audio player">
-        <i class="fas fa-headphones"></i>
-    </button>
--->
-     
-    <!-- Mobile Scroll Button -->
-    <button class="mobile-scroll-btn" id="mobile-scroll-btn" aria-label="Scroll down">
-        <i class="fas fa-arrow-down"></i>
-    </button>
-    
-     
-    <!-- Footer 
-    <footer class="bg-dark text-white py-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-6 padding_left"><p class="font_size">Check my other platforms: </p>
-                </div>
-                <div class="col-6">
-                    <a href="#" class="px-4 text-white" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                    <a href="#" class="text-white" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-8 padding_left">
-                    <input type="email" class="form-control" placeholder="Share your email for notifications">
-                </div>
-                <div class="col-4 align_center2">
-                    <button type="button" class="btn btn-primary">Subscribe</button>
-                </div>
-            </div>
-        </div>
-    </footer>
-     -->
+            getUserId() {
+                // Generate or retrieve user ID from localStorage
+                let userId = localStorage.getItem('mindscape_user_id');
+                if (!userId) {
+                    userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('mindscape_user_id', userId);
+                }
+                return userId;
+            }
+
+            getStorageKey() {
+                return `mindscape_quotes_${this.userId}`;
+            }
+
+            loadQuotes() {
+                const storageKey = this.getStorageKey();
+                const savedQuotes = localStorage.getItem(storageKey);
+                this.quotes = savedQuotes ? JSON.parse(savedQuotes) : [];
+                this.updateQuoteCount();
+                return this.quotes;
+            }
+
+            saveQuotes() {
+                const storageKey = this.getStorageKey();
+                localStorage.setItem(storageKey, JSON.stringify(this.quotes));
+                this.updateQuoteCount();
+            }
+
+            addQuote(quoteData) {
+                // Check if we've reached the maximum
+                if (this.quotes.length >= this.maxQuotes) {
+                    alert(`Maximum of ${this.maxQuotes} quotes reached. Please delete some quotes to add new ones.`);
+                    return false;
+                }
+
+                const newQuote = {
+                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    title: quoteData.title || 'Untitled Quote',
+                    text: quoteData.text,
+                    note: quoteData.note || '',
+                    source: quoteData.source || window.location.href,
+                    timestamp: new Date().toISOString(),
+                    createdAt: new Date().toLocaleString()
+                };
+
+                // Add to beginning for chronological order (newest first)
+                this.quotes.unshift(newQuote);
+                this.saveQuotes();
+                return true;
+            }
+
+            updateQuote(quoteId, updates) {
+                const quoteIndex = this.quotes.findIndex(q => q.id === quoteId);
+                if (quoteIndex !== -1) {
+                    this.quotes[quoteIndex] = { ...this.quotes[quoteIndex], ...updates };
+                    this.saveQuotes();
+                    return true;
+                }
+                return false;
+            }
+
+            deleteQuote(quoteId) {
+                this.quotes = this.quotes.filter(q => q.id !== quoteId);
+                this.saveQuotes();
+                return true;
+            }
+
+            updateQuoteCount() {
+                const countElement = document.getElementById('quote-count');
+                if (countElement) {
+                    countElement.textContent = `(${this.quotes.length}/${this.maxQuotes})`;
+                }
+            }
+
+            getQuotes() {
+                return this.quotes;
+            }
+        }
+
+        // Initialize quote manager
+        const quoteManager = new QuoteManager();
+
+        // Expandable bookmarks functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookmarksToggle = document.getElementById('bookmarks-toggle');
+            const bookmarksSection = document.querySelector('.bookmarks-section');
+            const bookmarksContent = document.getElementById('bookmarks-content');
+            const toggleIcon = bookmarksToggle.querySelector('.bookmarks-toggle');
+            
+            bookmarksToggle.addEventListener('click', function() {
+                bookmarksSection.classList.toggle('expanded');
+                bookmarksContent.classList.toggle('expanded');
+                toggleIcon.classList.toggle('rotated');
+            });
+
+            // Load existing quotes
+            renderQuotes();
+
+            // Upload toggle functionality
+            const uploadToggle = document.getElementById('upload-toggle');
+            const uploadPanel = document.getElementById('upload-panel');
+            let uploadVisible = false;
+
+            uploadToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                uploadVisible = !uploadVisible;
+                if (uploadVisible) {
+                    uploadPanel.classList.add('show');
+                    uploadToggle.innerHTML = '<i class="fas fa-times"></i>';
+                } else {
+                    uploadPanel.classList.remove('show');
+                    uploadToggle.innerHTML = '<i class="fas fa-file-upload"></i>';
+                }
+            });
+
+            // Close upload panel when clicking outside
+            document.addEventListener('click', function(e) {
+                if (uploadVisible && !uploadPanel.contains(e.target) && !uploadToggle.contains(e.target)) {
+                    uploadVisible = false;
+                    uploadPanel.classList.remove('show');
+                    uploadToggle.innerHTML = '<i class="fas fa-file-upload"></i>';
+                }
+            });
+
+            // Text selection functionality
+            const selectionPopup = document.getElementById('selection-popup');
+            const textContent = document.getElementById('text-content');
+            const quotesContainer = document.getElementById('quotes-container');
+            let currentSelection = '';
+
+            // Show popup when text is selected
+            document.addEventListener('mouseup', function(e) {
+                const selection = window.getSelection();
+                const selectedText = selection.toString().trim();
+                
+                if (selectedText.length > 0 && textContent.contains(selection.anchorNode)) {
+                    currentSelection = selectedText;
+                    
+                    // Get position of selection
+                    const range = selection.getRangeAt(0);
+                    const rect = range.getBoundingClientRect();
+                    
+                    // Position popup above selection
+                    selectionPopup.style.display = 'block';
+                    selectionPopup.style.left = (rect.left + window.scrollX + (rect.width / 2) - 100) + 'px';
+                    selectionPopup.style.top = (rect.top + window.scrollY - 45) + 'px';
+                    
+                    // Highlight selected text
+                    const span = document.createElement('span');
+                    span.className = 'text-highlight';
+                    range.surroundContents(span);
+                    
+                    // Clear selection after highlighting
+                    selection.removeAllRanges();
+                } else {
+                    selectionPopup.style.display = 'none';
+                }
+            });
+
+            // Save selected text to quotes
+            selectionPopup.addEventListener('click', function() {
+                if (currentSelection) {
+                    const success = quoteManager.addQuote({
+                        title: 'Selected Quote',
+                        text: currentSelection,
+                        note: 'Automatically saved from text selection',
+                        source: window.location.href
+                    });
+
+                    if (success) {
+                        renderQuotes();
+                        
+                        // Expand quotes section if collapsed
+                        if (!bookmarksSection.classList.contains('expanded')) {
+                            bookmarksSection.classList.add('expanded');
+                            bookmarksContent.classList.add('expanded');
+                            toggleIcon.classList.add('rotated');
+                        }
+                        
+                        // Auto-fill the manual quote form
+                        document.getElementById('new-quote-text').value = currentSelection;
+                    }
+                    
+                    // Clear selection and hide popup
+                    currentSelection = '';
+                    selectionPopup.style.display = 'none';
+                }
+            });
+
+            // Manual quote saving
+            document.getElementById('save-quote-btn').addEventListener('click', function() {
+                const title = document.getElementById('new-quote-title').value.trim();
+                const text = document.getElementById('new-quote-text').value.trim();
+                const note = document.getElementById('new-quote-note').value.trim();
+                
+                if (text) {
+                    const success = quoteManager.addQuote({
+                        title: title || 'New Quote',
+                        text: text,
+                        note: note,
+                        source: window.location.href
+                    });
+
+                    if (success) {
+                        renderQuotes();
+                        
+                        // Clear form
+                        document.getElementById('new-quote-title').value = '';
+                        document.getElementById('new-quote-text').value = '';
+                        document.getElementById('new-quote-note').value = '';
+                    }
+                }
+            });
+
+            // Document upload functionality
+            const fileInput = document.getElementById('document-upload');
+            const readerTitle = document.getElementById('reader-title');
+            const documentInfo = document.getElementById('document-info');
+
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    readerTitle.textContent = 'Processing: ' + file.name;
+                    documentInfo.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+
+                    uploadVisible = false;
+                    uploadPanel.classList.remove('show');
+                    uploadToggle.innerHTML = '<i class="fas fa-file-upload"></i>';
+
+                    setTimeout(() => {
+                        processUploadedFile(file);
+                    }, 1000);
+                }
+            });
+
+            function renderQuotes() {
+                const quotes = quoteManager.getQuotes();
+                const quotesContainer = document.getElementById('quotes-container');
+                
+                if (quotes.length === 0) {
+                    quotesContainer.innerHTML = '<p class="text-muted text-center">No quotes saved yet. Select text to save quotes.</p>';
+                    return;
+                }
+
+                let html = '';
+                quotes.forEach(quote => {
+                    html += `
+                        <div class="bookmark mb-3" data-quote-id="${quote.id}">
+                            <div class="bookmark-header d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <strong class="editable-title" contenteditable="true" data-quote-id="${quote.id}">${quote.title}</strong>
+                                    <span class="delete-quote" onclick="deleteQuote('${quote.id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                </div>
+                                <span class="text-muted">${quote.createdAt}</span>
+                            </div>
+                            <div class="bookmark-content">
+                                "${quote.text}"
+                            </div>
+                            <div class="bookmark-note">
+                                <strong>My Note:</strong> <span contenteditable="true" data-quote-id="${quote.id}" data-field="note">${quote.note || 'No additional notes'}</span>
+                            </div>
+                            <div class="quote-source">
+                                <small>Source: ${quote.source}</small>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                quotesContainer.innerHTML = html;
+
+                // Add event listeners for editable fields
+                document.querySelectorAll('.editable-title').forEach(element => {
+                    element.addEventListener('blur', function() {
+                        const quoteId = this.getAttribute('data-quote-id');
+                        const newTitle = this.textContent.trim();
+                        if (newTitle) {
+                            quoteManager.updateQuote(quoteId, { title: newTitle });
+                        }
+                    });
+                });
+
+                document.querySelectorAll('[data-field="note"]').forEach(element => {
+                    element.addEventListener('blur', function() {
+                        const quoteId = this.getAttribute('data-quote-id');
+                        const newNote = this.textContent.trim();
+                        quoteManager.updateQuote(quoteId, { note: newNote });
+                    });
+                });
+            }
+
+            function processUploadedFile(file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    
+                    documentInfo.innerHTML = `<small>${file.name} (${formatFileSize(file.size)})</small>`;
+                    
+                    if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+                        displayTextContent(content, file.name);
+                    } else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+                        displayTextContent('PDF content parsing would require additional libraries. Content: ' + content.substring(0, 1000) + '...', file.name);
+                    } else if (file.type.includes('word') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+                        displayTextContent('Word document parsing would require additional libraries. File: ' + file.name, file.name);
+                    } else {
+                        displayTextContent(content, file.name);
+                    }
+                };
+
+                if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+                    reader.readAsText(file);
+                } else {
+                    reader.readAsArrayBuffer(file);
+                }
+            }
+
+            function displayTextContent(content, fileName) {
+                const paragraphs = content.split('\n\n').filter(p => p.trim().length > 0);
+                
+                let htmlContent = `<div class="parsed-content">`;
+                htmlContent += `<h1>${fileName}</h1>`;
+                
+                paragraphs.forEach(paragraph => {
+                    if (paragraph.trim().length > 0) {
+                        const sentences = paragraph.split(/[.!?]+/).filter(s => s.trim().length > 0);
+                        let paragraphHTML = '<p>';
+                        
+                        sentences.forEach((sentence, index) => {
+                            if (sentence.trim()) {
+                                paragraphHTML += `<span class="sentence">${sentence.trim()}</span>`;
+                                if (index < sentences.length - 1) {
+                                    paragraphHTML += ' ';
+                                }
+                            }
+                        });
+                        
+                        paragraphHTML += '</p>';
+                        htmlContent += paragraphHTML;
+                    }
+                });
+                
+                htmlContent += `</div>`;
+                textContent.innerHTML = htmlContent;
+                readerTitle.textContent = fileName;
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+
+        // Global function for quote deletion
+        function deleteQuote(quoteId) {
+            if (confirm('Are you sure you want to delete this quote?')) {
+                quoteManager.deleteQuote(quoteId);
+                document.querySelector(`[data-quote-id="${quoteId}"]`).remove();
+                
+                // Re-render to update count and handle empty state
+                const quotesContainer = document.getElementById('quotes-container');
+                if (quoteManager.getQuotes().length === 0) {
+                    quotesContainer.innerHTML = '<p class="text-muted text-center">No quotes saved yet. Select text to save quotes.</p>';
+                }
+                
+                quoteManager.updateQuoteCount();
+            }
+        }
+    </script>
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
