@@ -1,204 +1,351 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mindscape Explorer | Media</title>
-
-    <!-- SEO -->
+    
+     <!-- SEO -->
 <title>Media & Art | Consciousness Through Creative Expression | Mindscape Explorer</title>
 <meta name="description" content="Curated videos exploring mindfulness through media and artistic expression. Daily content on well-being.">
-<link rel="canonical" href="https://mindscape-explorer.onrender.com/media_with_gm2.html
+<link rel="canonical" href="https://mindscape-explorer.onrender.com/media_with_gm2.html">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/css-index.css">
+    <link rel="stylesheet" href="css/css-index.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/js-index.js"></script>
+    <script src="js/js-index.js"></script>
+    
     <style>
-    /* customized page 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: #fff;
-            min-height: 100vh;
-        } */
+        /* Custom styles for the modified text reader */
+        .reader-container {
+            width: 95vw;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .reader-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        
+        .book-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            font-size: 18px;
+            line-height: 1.6;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            max-height: 60vh;
+        }
+        
+        .bookmarks-section {
+            border-top: 1px solid #eee;
+            background: white;
+        }
+        
+        .bookmarks-header {
+            padding: 15px 30px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .bookmarks-header:hover {
+            background: var(--secondary-color);
+        }
+        
+        .bookmarks-content {
+            padding: 20px 30px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .bookmarks-content.expanded {
+            max-height: 300px;
+            padding: 20px 30px;
+        }
+        
+        .bookmarks-toggle {
+            transition: transform 0.3s ease;
+        }
+        
+        .bookmarks-toggle.rotated {
+            transform: rotate(180deg);
+        }
     </style>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Mindful Gameplays",
+      "description": "Exploring consciousness through curated gameplay experiences",
+      "url": "https://your-render-app.onrender.com/media",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Mindscape Explorer"
+      }
+    }
+    </script>
 </head>
 <body>
     <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="index.html">Mindful Explorations</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="mind.html">Mind & Behavior</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="media.html">Media</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="buddhism.html">Buddhism</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-    
-    <!-- Hero Section -->
-    
-    <header class="hero-section">
-        <div class="container h-100">
-            <div class="row h-100 align-items-center">
-                <div class="col-lg-12 text-center">
-                    <h1 class="display-3 text-white">Media content related to well being</h1>
-                    <p class="lead text-white">I view art within media as an expression tool for analogies that lead to impartial understandings that encourage changes in behaviour</p>
-                </div>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </header>
-
-    
-    <!-- Content Section -->
-    
-    <section class="container py-5">
-    <div class="row text-center mb-5">
-        <div class="col-lg-8 mx-auto">
-            <h2 class="display-4">Daily dose of videos</h2>
-            <p class="lead">Selected youtube videos each day</p>
-        		<p>Nr. of videos: , Total lenght of videos: (some js script) </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="ratio ratio-16x9">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-        title="Mindful Media Exploration" 
-        aria-label="Educational video player"
-        allowfullscreen></iframe>
-                </div>
-                <div class="card-body">
-                    <button class="btn btn-primary mt-2">View-button of videos playlist hosted on a free cloud platform (some js script to use an API for playing video,audio and book content like Internet archive)</button>
-                </div>
-            </div>
-        </div>
-        <!-- Add more video cards as needed -->
-    </div>
-</section>
-
-<section class="container py-5">
-    <div class="row text-center mb-5">
-        <div class="col-lg-8 mx-auto">
-            <h2 class="display-4">Motion-picture favourites</h2>
-            <p class="lead">Selected artistic videos</p>
-        		<p>Nr. of videos: , Total lenght of videos: (some js script) </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="ratio ratio-16x9">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-                </div>
-                <div class="card-body">
-                    <button class="btn btn-primary mt-2">View-button of library Internet archive API</button>
-                </div>
-            </div>
-        </div>
-        <!-- Add more video cards as needed -->
-    </div>
-</section>
-<!--  Floating title  
-
-<section id="header">
-    <div class="container">
-        <div class="row align-items-center justify-content-center">
-            <div class col>
-                <div class="banner text-center">
-                    <h1 class="display-1 text-capitalize w-50 mx-auto"><small>Sushi </small><strong class="primary-color">Master</strong></h1>
-                    <a href="" class="btn main-btn my-4 text-caputalize">dive in</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <a href="special-items" class="btn header-link primary-color"><i class="fas fa-arrow-down"></i></a> 
-</section>
--->
-    
-<!-- Audio Player -->
-    <div class="audio-player-container" id="audio-player">
-        <div class="player-header">
-            <h5 class="player-title">Mindful Sounds</h5>
-            <div class="player-controls">
-                <button class="player-btn" id="prev-btn"><i class="fas fa-step-backward"></i></button>
-                <button class="player-btn" id="play-btn"><i class="fas fa-play"></i></button>
-                <button class="player-btn" id="next-btn"><i class="fas fa-step-forward"></i></button>
-            </div>
-        </div>
-        <div class="progress-container" id="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div class="time-display">
-            <span id="current-time">0:00</span>
-            <span id="duration">0:00</span>
-        </div>
-        <div class="playlist" id="playlist">
-            <div class="playlist-item active" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Meditation Tone</div>
-            <div class="playlist-item" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Nature Sounds</div>
-            <div class="playlist-item" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Zen Bell</div>
-        </div>
-        <div class="audio-upload">
-            <input type="file" id="file-upload" accept="audio/*" style="display: none;">
-            <button class="upload-btn" id="upload-btn"><i class="fas fa-upload"></i> Upload</button>
-            <input type="text" class="url-input mt-2" id="audio-url" placeholder="Or enter audio URL">
-            <button class="upload-btn mt-2 w-100" id="add-url-btn"><i class="fas fa-link"></i> Add URL</button>
-        </div>
-    </div>
-
-    <!-- Player Toggle Button -->
-    <button class="player-toggle-btn" id="player-toggle">
-        <i class="fas fa-headphones"></i>
-    </button>
-
-    <!-- Mobile Scroll Button -->
-    <button class="mobile-scroll-btn" id="mobile-scroll-btn">
-        <i class="fas fa-arrow-down"></i>
-    </button>
-    
-   <!-- Footer  -->
-    <footer class="bg-dark text-white py-2">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            <div class="row">
-                <div class="col-6 padding_left"><p class=" font_size">Check my other platforms: </p>
-                </div>
-                <div class="col-6 ">
-                    <a href="#" class="px-4 text-white"><i class="fab     fa-youtube"></i></a>
-                     <a href="#" class="text-white"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
-            <div class="row">
-                    <div class="col-8 padding_left">
-                    <input type="email" class="form-control" placeholder="Share your email for notifications">
-                    </div>
-                    <div class="col-4 align_center2">
-                    <button type="button" class="btn btn-primary">Subscribe</button>
-                    </div>
-                </div>
+            <a class="navbar-brand" href="index.html">Mindful Explorations</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="buddhism.html">Buddhism</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mind.html">Psychology</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="media_with_gm2.html">Media</a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </footer>
-        
+    </nav>
+
+        <!-- Media Section -->
+        <section id="media" class="page-section">
+            <div class="container py-5">
+                <article>
+                    <header class="row text-center mb-5">
+                        <div class="col-lg-8 mx-auto">
+                            <h1 class="display-4">Gameplays</h1>
+                        </div>
+                    </header>
+                    
+                    <section class="row">
+                        <div class="col-md-8 mx-auto">
+                            <div class="card h-100">
+                                <div class="ratio ratio-16x9">
+                                  <iframe 
+  src="https://www.youtube.com/embed/g-3FIkyGgSg"
+  width="560" 
+  height="315"
+  frameborder="0"
+  allowfullscreen>
+                                  </iframe>
+                                </div>
+                                <div class="card-body">
+                                    <h2>Two types of fire</h2>
+                                    <p>The two types of fire: fire of lust and fire of mindfulness.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </section>
+
+        <!-- Text Reader Section -->
+        <section class="container py-5">
+            <div class="reader-container">
+                <div class="book-cover">
+                    Two Types of Fire: Buddhist Teachings
+                </div>
+                <div class="reader-body">
+                    <div class="book-content">
+                        <h2>Two Types of Fire: Fire of Lust and Fire of Mindfulness</h2>
+                        
+                        <p><span class="sentence">The two types of fire: fire of lust and fire of mindfulness.</span></p>
+
+                        <h3>Scriptural References</h3>
+                        
+                        <p><span class="sentence">"Here, friend Sariputta, a bhikkhu has learned much, remembers what he has learned, and consolidates what he has learned."</span> <span class="sentence">"Such teachings as are good in the beginning, good in the middle, and good in the end, with the right meaning and phrasing, and which affirm a holy life that is utterly perfect and pure — such teachings as these he has learned much of, remembered, mastered verbally, investigated with the mind, and penetrated well by view."</span> <span class="sentence">"And he teaches the Dhamma to the four assemblies with well-rounded and coherent statements and phrases for the eradication of the underlying tendencies."</span> <span class="sentence">"That kind of bhikkhu could illuminate this Gosinga Sala-tree Wood."</span> <span class="sentence">(32 Mahàgosinga Sutta: The Greater Discourse in Gosinga; Majjihima Nikaya)</span></p>
+                        
+                        <p><span class="sentence">"Delight at heart, every disciple should not hesitate, wherever possible, to inculcate the Dharma that is real and subtle and to show the path of nirvana, believing in the testimony of what the knower of the path has been practicing."</span> <span class="sentence">(The Canonical Book of the Buddha's Lengthy Discourses, Vol. I; page 77)</span></p>
+                        
+                        <p><span class="sentence">"And what, Punna, is dark action with dark result?"</span> <span class="sentence">"Here someone generates an afflictive bodily formation, an afflictive verbal formation, an afflictive mental formation."</span> <span class="sentence">"Having generated an afflictive bodily formation, an afflictive verbal formation, an afflictive mental formation, he reappears in an afflictive world."</span> <span class="sentence">"When he has reappeared in an afflictive world, afflictive contacts touch him."</span> <span class="sentence">"Being touched by afflictive contacts, he feels afflictive feelings, extremely painful, as in the case of the beings in hell."</span> <span class="sentence">"Thus a being's reappearance is due to a being: one reappears through the actions one has performed."</span> <span class="sentence">"When one has reappeared, contacts touch one."</span> <span class="sentence">"Thus I say beings are the heirs of their actions."</span> <span class="sentence">"This is called dark action with dark result."</span> <span class="sentence">(57 Kukkuravatika Sutta: The Dog-duty Ascetic; Majjihima Nikaya)</span></p>
+
+                        <h3>Understanding Wrong View</h3>
+                        
+                        <p><span class="sentence">My understanding: wrong view is wrong understanding of purpose of life (not believing in karma, or wrong application of cleaning bad karma; right application is the eightfold path - by developing wholesome mind states to reach understanding and by this remove the defilements of sensual pleasures, of being and of ignorance, reaching final Nibbana), because of negligence in investigating thoroughly.</span></p>
+                        
+                        <p><span class="sentence">"Investigate thoroughly, householder. It is good for such well-known people like you to investigate thoroughly."</span> <span class="sentence">(56 Upali Sutta: To Upali; Majjihima Nikaya)</span></p>
+
+                        <h3>The Fire of Mindfulness</h3>
+                        
+                        <p><span class="sentence">How to investigate thoroughly? With the fire of mindfulness.</span></p>
+                        
+                        <p><span class="sentence">"Here, Udayin, some person practices the way to the abandoning of attachment, to the relinquishing of attachment."</span> <span class="sentence">"When he is practicing the way, memories and intentions associated with attachment beset him now and then through lapses of mindfulness."</span> <span class="sentence">"His mindfulness may be slow in arising, but he quickly abandons them, removes them, does away with them, and annihilates them."</span> <span class="sentence">"Just as if a man were to let two or three drops of water fall onto an iron plate heated for a whole day, the falling of the water drops might be slow but they would quickly vaporise and vanish."</span> <span class="sentence">"So too, here some person practices the way... His mindfulness may be slow in arising, but he quickly abandons them, removes them, does away with them, and annihilates them."</span> <span class="sentence">"Such a person too I call fettered, not unfettered."</span> <span class="sentence">"Why is that? Because I have known the particular diversity of faculties in this person."</span> <span class="sentence">(66 Latukikopama Sutta: The Simile of the Quail; Majjihima Nikaya)</span></p>
+                        
+                        <p><span class="sentence">I understand this statement as describing a stream-enterer.</span> <span class="sentence">Memories and intentions associated with attachment are unwholesome mind tendencies.</span> <span class="sentence">I see more clearly, as bad mind tendencies diminish.</span></p>
+
+                        <h3>Daily Practice</h3>
+                        
+                        <p><span class="sentence">My daily practice: - 1 hour in morning as instructed in Fukanzazengi.</span> <span class="sentence">In my understanding it corresponds to second jhana and above.</span></p>
+                        
+                        <p><span class="sentence">- half an hour in total in evening to break sanran/agitation tendency of mind, by visualization a couple of times as instructed in Wild Ivy Chapter 4: Zen Sickness, The Soft-Butter Method, then I concentrate on breaths on lower tanden/hara.</span> <span class="sentence">In my understanding this corresponds to first jhana since it has a particular object to focus upon.</span></p>
+                        
+                        <p><span class="sentence">- in the rest of the time I practice mindfulness in all actions I do, by lowering expectancies and plans while concentrating on one thing at a time; it's hard since fears and obsessive thoughts keep popping up in my head, but with practice those speculative, temporary conclusions-thoughts and the other distractions can be cut off more easily.</span></p>
+
+                        <h3>Stream-Entry and Beyond</h3>
+                        
+                        <p><span class="sentence">- stream-entry fruit: The three fetters destroyed by the stream-enterer are personality view, doubt in Buddha and adherence to external rules and observances believing that solely bodily actions with no benevolent intent and only faith can purify oneself (superstitions).</span> <span class="sentence">These fetters I let go by daily practice.</span></p>
+                        
+                        <p><span class="sentence">- final arahant-fruit: "I do not say of those bhikkhus who are arahants with taints destroyed, who have lived the holy life, done what had to be done, laid down the burden, reached the true goal, destroyed the fetters of being, and are completely liberated through final knowledge, that they still have work to do with diligence."</span> <span class="sentence">"Why is that? They have done their work with diligence; they are no more capable of being negligent."</span></p>
+
+                        <div class="pagination mt-5">
+                            <button class="btn btn-outline-primary"><i class="fas fa-arrow-left me-2"></i>Previous Page</button>
+                            <button class="btn btn-primary">Next Page<i class="fas fa-arrow-right ms-2"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Expandable Bookmarks Section -->
+                <div class="bookmarks-section">
+                    <div class="bookmarks-header" id="bookmarks-toggle">
+                        <h4 class="mb-0"><i class="fas fa-bookmark me-2"></i>Bookmarks & Notes</h4>
+                        <i class="fas fa-chevron-down bookmarks-toggle"></i>
+                    </div>
+                    <div class="bookmarks-content" id="bookmarks-content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="bookmark mb-3">
+                                    <div class="bookmark-header">
+                                        <strong>Fire of Mindfulness</strong>
+                                        <span class="text-muted">Today</span>
+                                    </div>
+                                    <div class="bookmark-content">
+                                        "How to investigate thoroughly? With the fire of mindfulness."
+                                    </div>
+                                    <div class="bookmark-note">
+                                        <strong>My Note:</strong> Key practice for spiritual development
+                                    </div>
+                                </div>
+                                
+                                <div class="bookmark mb-3">
+                                    <div class="bookmark-header">
+                                        <strong>Daily Practice</strong>
+                                        <span class="text-muted">Today</span>
+                                    </div>
+                                    <div class="bookmark-content">
+                                        "1 hour morning meditation, 30 minutes evening practice"
+                                    </div>
+                                    <div class="bookmark-note">
+                                        <strong>My Note:</strong> Consistent practice schedule
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="bookmark mb-3">
+                                    <div class="bookmark-header">
+                                        <strong>Stream-Entry</strong>
+                                        <span class="text-muted">Today</span>
+                                    </div>
+                                    <div class="bookmark-content">
+                                        "Three fetters destroyed by stream-enterer"
+                                    </div>
+                                    <div class="bookmark-note">
+                                        <strong>My Note:</strong> Personality view, doubt, superstition
+                                    </div>
+                                </div>
+                                
+                                <div class="note-editor">
+                                    <h5 class="section-title"><i class="fas fa-edit me-2"></i>Add New Bookmark</h5>
+                                    <div class="mb-3">
+                                        <label class="form-label">Bookmark Title</label>
+                                        <input type="text" class="form-control" placeholder="Enter bookmark title">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Your Note</label>
+                                        <textarea class="form-control" rows="2" placeholder="Add your personal note..."></textarea>
+                                    </div>
+                                    <button class="btn btn-accent w-100"><i class="fas fa-bookmark me-2"></i>Save Bookmark</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls-panel">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary" id="play-btn">
+                                <i class="fas fa-play me-2"></i>Play
+                            </button>
+                            <button class="btn btn-outline-primary" id="pause-btn">
+                                <i class="fas fa-pause me-2"></i>Pause
+                            </button>
+                            <button class="btn btn-outline-primary" id="stop-btn">
+                                <i class="fas fa-stop me-2"></i>Stop
+                            </button>
+                            <button class="btn btn-outline-primary" id="bookmark-btn">
+                                <i class="fas fa-bookmark me-2"></i>Bookmark
+                            </button>
+                        </div>
+                            
+                        <div class="d-flex">
+                            <i class="fas fa-voice me-2 text-muted"></i>
+                            <select class="form-select form-select-sm">
+                                <option>Voice 1 (Female)</option>
+                                <option>Voice 2 (Male)</option>
+                                <option>Voice 3 (Female)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container mt-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <small>Reading Progress: 45% completed</small>
+                            <small>15:30 remaining</small>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar" role="progressbar" style="width: 45%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <script>
+        // Expandable bookmarks functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookmarksToggle = document.getElementById('bookmarks-toggle');
+            const bookmarksContent = document.getElementById('bookmarks-content');
+            const toggleIcon = bookmarksToggle.querySelector('.bookmarks-toggle');
+            
+            bookmarksToggle.addEventListener('click', function() {
+                bookmarksContent.classList.toggle('expanded');
+                toggleIcon.classList.toggle('rotated');
+            });
+        });
+    </script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
 </body>
 </html>
